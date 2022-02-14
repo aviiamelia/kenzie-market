@@ -1,0 +1,1514 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Kenzie Market Api",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://kenzie-market-avilamelia.herokuapp.com",
+      "description": "Production Server"
+    },
+    {
+      "url": "http://localhost:3000",
+      "description": "Local Server"
+    }
+  ],
+  "paths": {
+    "/user": {
+      "get": {
+        "description": "List all users",
+        "responses": {
+          "200": {
+            "description": "List of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/usersList"
+                },
+                "examples": {
+                  "userList": {
+                    "value": [
+                      {
+                        "id": "a5bbdc91-da24-485c-9849-4f06d343cc37",
+                        "email": "email@example.com",
+                        "name": "example",
+                        "isAdm": true,
+                        "createdOn": "2022-02-07T18:45:45.446Z",
+                        "updatedOn": "2022-02-07T18:45:45.446Z"
+                      },
+                      {
+                        "id": "a5bbdc91-da24-485c-9849-4f06d343cc37",
+                        "email": "email@example.com",
+                        "name": "example",
+                        "isAdm": true,
+                        "createdOn": "2022-02-07T18:45:45.446Z",
+                        "updatedOn": "2022-02-07T18:45:45.446Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing authorization token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized"
+                },
+                "example": {
+                  "missing headers authorization token or invalid token": {
+                    "value": {
+                      "message": "Missing authorization headers"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Create user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/user"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "name": "example",
+                    "password": "examplepassword",
+                    "email": "exampleo@mail.com",
+                    "isAdm": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User Created",
+            "content": {
+              "applicatoin/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user"
+                },
+                "examples": {
+                  "user": {
+                    "value": {
+                      "id": "a5bbdc91-da24-485c-9849-4f06d343cc37",
+                      "email": "email@example.com",
+                      "name": "example",
+                      "isAdm": true,
+                      "createdOn": "2022-02-07T18:45:45.446Z",
+                      "updatedOn": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "User already registred",
+            "content": {
+              "applicatoin/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user"
+                },
+                "examples": {
+                  "database conflict": {
+                    "value": {
+                      "message": "User already registered"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [{}]
+      }
+    },
+    "/user/{userid}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "schema": { "type": "string" },
+          "required": true,
+          "description": "string of type uuid"
+        }
+      ],
+      "delete": {
+        "description": "Delete and User",
+        "responses": {
+          "204": {
+            "description": "User deleted"
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "userNotFound": {
+                    "value": {
+                      "message": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized"
+                },
+                "examples": {
+                  "AuThorized": {
+                    "value": {
+                      "message": "You must be a Administrator to access this route"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Get user by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "string of type uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user"
+                },
+                "examples": {
+                  "userList": {
+                    "value": {
+                      "id": "a5bbdc91-da24-485c-9849-4f06d343cc37",
+                      "email": "email@example.com",
+                      "name": "example",
+                      "isAdm": true,
+                      "createdOn": "2022-02-07T18:45:45.446Z",
+                      "updatedOn": "2022-02-07T18:45:45.446Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "userNotFound": {
+                    "value": {
+                      "message": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized"
+                },
+                "examples": {
+                  "AuThorized": {
+                    "value": {
+                      "message": "You must be a Administrator to access this route"
+                    }
+                  },
+                  "Missing Authorization token": {
+                    "value": {
+                      "message": "Missing authorization headers"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cart": {
+      "get": {
+        "description": "List all carts in database",
+        "responses": {
+          "200": {
+            "description": "Succesfuly return carts in database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/cartList"
+                },
+                "examples": {
+                  "cartList": {
+                    "value": [
+                      {
+                        "id": 3,
+                        "createdOn": "2022-02-07T18:46:19.513Z",
+                        "user": {
+                          "id": "580890aa-0c44-4e8d-942e-779474a5db81",
+                          "name": "administrator",
+                          "email": "administrator@mail.com",
+                          "password": "$2a$10$7kDfVUicboVZCoIHOKLpAOff9iN2/5MAYbiOPVdmZl0gXdGVTI/Y6",
+                          "isAdm": true,
+                          "createdOn": "2022-02-07T18:46:19.507Z",
+                          "updatedOn": null
+                        },
+                        "products": [
+                          {
+                            "id": "1c0a5509-f4cd-4b89-911d-6d6a51faacd0",
+                            "name": "laranja",
+                            "category": "limpeza",
+                            "price": 15,
+                            "addedOn": "2022-02-07T18:46:37.611Z",
+                            "updatedOn": "2022-02-07T18:46:37.611Z"
+                          }
+                        ],
+                        "order": null
+                      },
+                      {
+                        "id": 4,
+                        "createdOn": "2022-02-08T16:50:02.054Z",
+                        "user": {
+                          "id": "9737016b-c3ff-4d9d-9840-fca1fa504012",
+                          "name": "administratorRafael",
+                          "email": "rafael.zoe26@gmail.com",
+                          "password": "$2a$10$xfSGTrcFLUXPBw1yZNndQ.c9VkvWSHWqCPi8Ksg7uPAxNzrtSH11.",
+                          "isAdm": true,
+                          "createdOn": "2022-02-08T16:50:02.015Z",
+                          "updatedOn": null
+                        },
+                        "products": [
+                          {
+                            "id": "1c0a5509-f4cd-4b89-911d-6d6a51faacd0",
+                            "name": "laranja",
+                            "category": "limpeza",
+                            "price": 15,
+                            "addedOn": "2022-02-07T18:46:37.611Z",
+                            "updatedOn": "2022-02-07T18:46:37.611Z"
+                          }
+                        ],
+                        "order": null
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized"
+                },
+                "examples": {
+                  "unAuThorized": {
+                    "value": {
+                      "message": "You must be a Administrator to access this route"
+                    }
+                  },
+                  "Missing Authorization token": {
+                    "value": {
+                      "message": "Missing authorization headers"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Add a product to the current user cart",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "product": {
+                  "value": {
+                    "name": "banana",
+                    "category": "food",
+                    "price": 5.0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Product added to the cart",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/cartList"
+                },
+                "examples": {
+                  "Product added to the cart": {
+                    "value": {
+                      "id": 4,
+                      "createdOn": "2022-02-08T16:50:02.054Z",
+                      "user": {
+                        "id": "9737016b-c3ff-4d9d-9840-fca1fa504012",
+                        "name": "administratorRafael",
+                        "email": "rafael.zoe26@gmail.com",
+                        "password": "$2a$10$samops5sz7jGZKRmKPzS0e94BliitWEg38TU9Bsxqsna7F/hGjhpa",
+                        "isAdm": true,
+                        "createdOn": "2022-02-08T16:50:02.015Z",
+                        "updatedOn": null
+                      },
+                      "products": [
+                        {
+                          "id": "1c0a5509-f4cd-4b89-911d-6d6a51faacd0",
+                          "name": "banana",
+                          "category": "food",
+                          "price": 5.0,
+                          "addedOn": "2022-02-07T18:46:37.611Z",
+                          "updatedOn": "2022-02-07T18:46:37.611Z"
+                        }
+                      ],
+                      "order": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found in the database",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "product not found": {
+                    "value": {
+                      "message": "Product not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized"
+                },
+                "examples": {
+                  "unAuThorized": {
+                    "value": {
+                      "message": "You must be a Administrator to access this route"
+                    }
+                  },
+                  "Missing Authorization token": {
+                    "value": {
+                      "message": "Missing authorization headers"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cart/{cartid}": {
+      "get": {
+        "description": "Get a cart by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "string of type uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cart found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/cartList"
+                },
+                "examples": {
+                  "cart": {
+                    "value": {
+                      "id": 1,
+                      "createdOn": "2022-02-07T14:10:57.997Z",
+                      "user": {
+                        "id": "1debfa83-5dc6-4e20-a420-5f7ca9a13145",
+                        "name": "administrator",
+                        "email": "administrator@mail.com",
+                        "password": "$2a$10$AZBFKneXcTJ1fjM4NcOBWuVhpvmaSSsj9iPP9vZ1xw8QnVYnlgd..",
+                        "isAdm": true,
+                        "createdOn": "2022-02-07T14:10:57.971Z",
+                        "updatedOn": null
+                      },
+                      "products": [
+                        {
+                          "id": "97e636a7-ff97-48e4-a5a1-8dd287490b73",
+                          "name": "carne",
+                          "category": "limpeza",
+                          "price": 15,
+                          "addedOn": "2022-02-07T15:15:11.498Z",
+                          "updatedOn": "2022-02-07T15:15:11.498Z"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized"
+                },
+                "examples": {
+                  "unAuThorized": {
+                    "value": {
+                      "message": "You must be a Administrator to access this route"
+                    }
+                  },
+                  "Missing Authorization token": {
+                    "value": {
+                      "message": "Missing authorization headers"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cart not found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "userNotFound": {
+                    "value": {
+                      "message": "Cart not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a product from the cart",
+        "responses": {
+          "204": {
+            "description": "Product deleted"
+          },
+          "404": {
+            "description": "Product not found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "userNotFound": {
+                    "value": {
+                      "message": "Product not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid uuid params",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "userNotFound": {
+                    "value": {
+                      "message": "Id param is not a valid uuid type string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product": {
+      "get": {
+        "description": "List all products",
+        "responses": {
+          "200": {
+            "description": "return all products in database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/productsList"
+                },
+                "examples": {
+                  "Products": {
+                    "value": [
+                      {
+                        "id": "1c0a5509-f4cd-4b89-911d-6d6a51faacd0",
+                        "name": "orange",
+                        "category": "food",
+                        "price": 15,
+                        "addedOn": "2022-02-07T18:46:37.611Z",
+                        "updatedOn": "2022-02-07T18:46:37.611Z"
+                      },
+                      {
+                        "id": "468ba5a8-f236-4ce2-a10b-c948b51b1e50",
+                        "name": "shampoo",
+                        "category": "cleaning product",
+                        "price": 15,
+                        "addedOn": "2022-02-10T02:02:58.431Z",
+                        "updatedOn": "2022-02-10T02:02:58.431Z"
+                      },
+                      {
+                        "id": "0d97606b-40c1-4361-b766-fd68ee5424c7",
+                        "name": "hamburguer",
+                        "category": "food",
+                        "price": 15,
+                        "addedOn": "2022-02-10T02:03:53.167Z",
+                        "updatedOn": "2022-02-10T02:03:53.167Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [{}]
+      },
+      "post": {
+        "description": "Ads a product to the database",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/product"
+              },
+              "examples": {
+                "product": {
+                  "value": {
+                    "name": "hamburguer",
+                    "category": "food",
+                    "price": 15.0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product added to the database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/product"
+                },
+                "examples": {
+                  "Product added": {
+                    "value": {
+                      "message": "Product created",
+                      "product": {
+                        "name": "hamburguer",
+                        "category": "food",
+                        "price": 15,
+                        "id": "0d97606b-40c1-4361-b766-fd68ee5424c7",
+                        "addedOn": "2022-02-10T02:03:53.167Z",
+                        "updatedOn": "2022-02-10T02:03:53.167Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized"
+                },
+                "examples": {
+                  "unAuThorized": {
+                    "value": {
+                      "message": "You must be a Administrator to access this route"
+                    }
+                  },
+                  "Missing Authorization token": {
+                    "value": {
+                      "message": "Missing authorization headers"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product/{productid}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "string of type uuid"
+          }
+        ],
+        "description": "get a product by id",
+        "responses": {
+          "200": {
+            "description": "return a product",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/product"
+                },
+                "examples": {
+                  "Products": {
+                    "value": {
+                      "id": "1c0a5509-f4cd-4b89-911d-6d6a51faacd0",
+                      "name": "orange",
+                      "category": "food",
+                      "price": 15,
+                      "addedOn": "2022-02-07T18:46:37.611Z",
+                      "updatedOn": "2022-02-07T18:46:37.611Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "userNotFound": {
+                    "value": {
+                      "message": "Product not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [{}]
+      }
+    },
+    "/buy": {
+      "post": {
+        "description": "makes a purchase with the products in cart",
+        "responses": {
+          "201": {
+            "description": "Purchase made with sucess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/order"
+                },
+                "examples": {
+                  "order": {
+                    "value": {
+                      "order": {
+                        "user": {
+                          "id": "4e49c2a1-f6a5-4205-9316-5cf93c22fc52",
+                          "name": "administrator",
+                          "email": "administrator@gmail.com",
+                          "password": "$2a$10$XOZzv.aSiQ3QIIbdDuVEMOEWXOAXwTERnrJqYVOrDyGLVF8LeyGQu",
+                          "isAdm": true,
+                          "createdOn": "2022-02-10T03:13:15.310Z",
+                          "updatedOn": null
+                        },
+                        "id": "b8779355-dccd-4578-a7a8-ea625b56589d",
+                        "orderDate": "2022-02-10T03:48:41.966Z"
+                      },
+                      "cart_id": "e670018d-68a7-4681-8daf-54ecbc52c616",
+                      "cart_creation_date": "2022-02-10T03:13:15.332Z",
+                      "products": [
+                        {
+                          "id": "592e8c8a-ce73-4840-b739-e2e3f57c3126",
+                          "name": "hamburguer",
+                          "category": "food",
+                          "price": 15,
+                          "addedOn": "2022-02-10T03:14:04.386Z",
+                          "updatedOn": "2022-02-10T03:14:04.386Z"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing admin privileges or without headers token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized"
+                },
+                "examples": {
+                  "unAuThorized": {
+                    "value": {
+                      "message": "You must be a Administrator to access this route"
+                    }
+                  },
+                  "Missing Authorization token": {
+                    "value": {
+                      "message": "Missing authorization headers"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Order with empty cart",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "emptyCart": {
+                    "value": {
+                      "message": "There is no products in the cart to make a purchase"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "list all orders",
+        "responses": {
+          "200": {
+            "description": "return all orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/order"
+                },
+                "examples": {
+                  "order by id": {
+                    "value": [
+                      {
+                        "id": "1de30aa2-962b-438d-9f79-f40ebc87835a",
+                        "orderDate": "2022-02-10T03:28:43.994Z",
+                        "user": {
+                          "id": "4e49c2a1-f6a5-4205-9316-5cf93c22fc52",
+                          "name": "administrator",
+                          "email": "administrator@gmail.com",
+                          "password": "$2a$10$XOZzv.aSiQ3QIIbdDuVEMOEWXOAXwTERnrJqYVOrDyGLVF8LeyGQu",
+                          "isAdm": true,
+                          "createdOn": "2022-02-10T03:13:15.310Z",
+                          "updatedOn": null
+                        }
+                      },
+                      {
+                        "id": "736a1cad-63cf-4c67-b3ba-d12047e8c7d6",
+                        "orderDate": "2022-02-10T03:36:24.730Z",
+                        "user": {
+                          "id": "4e49c2a1-f6a5-4205-9316-5cf93c22fc52",
+                          "name": "administrator",
+                          "email": "administrator@gmail.com",
+                          "password": "$2a$10$XOZzv.aSiQ3QIIbdDuVEMOEWXOAXwTERnrJqYVOrDyGLVF8LeyGQu",
+                          "isAdm": true,
+                          "createdOn": "2022-02-10T03:13:15.310Z",
+                          "updatedOn": null
+                        }
+                      },
+                      {
+                        "id": "a1a610a4-1ff3-44bc-ab1b-f709a5fbafe8",
+                        "orderDate": "2022-02-10T03:38:13.382Z",
+                        "user": {
+                          "id": "4e49c2a1-f6a5-4205-9316-5cf93c22fc52",
+                          "name": "administrator",
+                          "email": "administrator@gmail.com",
+                          "password": "$2a$10$XOZzv.aSiQ3QIIbdDuVEMOEWXOAXwTERnrJqYVOrDyGLVF8LeyGQu",
+                          "isAdm": true,
+                          "createdOn": "2022-02-10T03:13:15.310Z",
+                          "updatedOn": null
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized"
+                },
+                "examples": {
+                  "unAuThorized": {
+                    "value": {
+                      "message": "You must be a Administrator to access this route"
+                    }
+                  },
+                  "Missing Authorization token": {
+                    "value": {
+                      "message": "Missing authorization headers"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "order not found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "userNotFound": {
+                    "value": {
+                      "message": "Order not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/buy{id}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": { "type": "string" },
+            "required": true,
+            "description": "string of type uuid"
+          }
+        ],
+        "description": "get order by id",
+        "responses": {
+          "200": {
+            "description": "return an order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/order"
+                },
+                "examples": {
+                  "order by id": {
+                    "value": {
+                      "order": {
+                        "id": "5b1dc9a6-c3e8-434d-b458-13f80f1a090d",
+                        "orderDate": "2022-02-10T03:43:14.844Z",
+                        "user": {
+                          "id": "4e49c2a1-f6a5-4205-9316-5cf93c22fc52",
+                          "name": "administrator",
+                          "email": "administrator@gmail.com",
+                          "password": "$2a$10$XOZzv.aSiQ3QIIbdDuVEMOEWXOAXwTERnrJqYVOrDyGLVF8LeyGQu",
+                          "isAdm": true,
+                          "createdOn": "2022-02-10T03:13:15.310Z",
+                          "updatedOn": null
+                        }
+                      },
+                      "cart": {
+                        "id": "e670018d-68a7-4681-8daf-54ecbc52c616",
+                        "createdOn": "2022-02-10T03:13:15.332Z",
+                        "user": {
+                          "id": "4e49c2a1-f6a5-4205-9316-5cf93c22fc52",
+                          "name": "administrator",
+                          "email": "administrator@gmail.com",
+                          "password": "$2a$10$XOZzv.aSiQ3QIIbdDuVEMOEWXOAXwTERnrJqYVOrDyGLVF8LeyGQu",
+                          "isAdm": true,
+                          "createdOn": "2022-02-10T03:13:15.310Z",
+                          "updatedOn": null
+                        },
+                        "products": [],
+                        "order": null
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized"
+                },
+                "examples": {
+                  "unAuThorized": {
+                    "value": {
+                      "message": "You must be a Administrator to access this route"
+                    }
+                  },
+                  "Missing Authorization token": {
+                    "value": {
+                      "message": "Missing authorization headers"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "order not found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "userNotFound": {
+                    "value": {
+                      "message": "Order not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "description": "make login in the application",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "login": {
+                  "value": {
+                    "email": "examil.example",
+                    "password": "123456789"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "succesfully logs in the application",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "returns a token": {
+                    "value": {
+                      "token": "4NywiZXhwIjoxNjQ0NTQ5NTg3fQ.MEyQISVwXao_N-cTJjaw_8pjtk2rzjZg1MRHtRIrUJM"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "wrong email or password",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "wrong email or password": {
+                    "value": {
+                      "message": "Wrong email/password"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/email": {
+      "post": {
+        "description": "sends a email to a user registered in the application",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "sending email": {
+                  "value": {
+                    "to": "example@gmail.com",
+                    "subject": "email test",
+                    "text": "testing sending email"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application": {
+                "examples": {
+                  "success": {
+                    "value": {
+                      "message": "E-mail send with sucess"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized"
+                },
+                "examples": {
+                  "unAuThorized": {
+                    "value": {
+                      "message": "You must be a Administrator to access this route"
+                    }
+                  },
+                  "Missing Authorization token": {
+                    "value": {
+                      "message": "Missing authorization headers"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/recuperar": {
+      "post": {
+        "description": "send code through email for password recovery",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "password recovery": {
+                  "value": {
+                    "email": "email.example@mail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "sucess",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "code sended to email": {
+                    "value": {
+                      "message": "We have sent a recovery code to your email"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing admin privileges",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized"
+                },
+                "examples": {
+                  "unAuThorized": {
+                    "value": {
+                      "message": "You must be a Administrator to access this route"
+                    }
+                  },
+                  "Missing Authorization token": {
+                    "value": {
+                      "message": "Missing authorization headers"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "user not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnAuthorized"
+                },
+                "examples": {
+                  "unAuThorized": {
+                    "value": {
+                      "message": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [{}]
+      }
+    },
+    "/alterar_senha": {
+      "post": {
+        "description": "changes user password",
+        "requestBody": {
+          "description": "takes the new password, the email and the code sended through email",
+          "content": {
+            "application": {
+              "examples": {
+                "body for password change": {
+                  "value": {
+                    "email": "rafael.zoe26@gmail.com",
+                    "password": "xablau1",
+                    "code": "$2a$05$v.Z1oVKeuSaRxfL1fGOvxOUr2FGf7j7lJUKpYJlJCKwQoNODiD4W"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "password changed",
+            "content": {
+              "application": {
+                "examples": {
+                  "password changed": {
+                    "value": {
+                      "message": "Your password has been sucessfully changed!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "wrong code",
+            "content": {
+              "application": {
+                "examples": {
+                  "wrong code": {
+                    "value": {
+                      "message": "The code sended does not match the one in your email"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "wrong email",
+            "content": {
+              "application": {
+                "examples": {
+                  "wrong email": {
+                    "value": {
+                      "message": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [{}]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "usersList": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Generated with UUID V4",
+              "readOnly": true
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "isAdm": {
+              "type": "boolean"
+            },
+            "createdOn": {
+              "type": "string",
+              "readOnly": true
+            },
+            "updatedOn": {
+              "type": "string",
+              "readOnly": true
+            }
+          }
+        }
+      },
+      "cartList": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "readOnly": false
+            },
+            "createdOn": {
+              "type": "string"
+            },
+            "user": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Generated with UUID V4",
+                  "readOnly": true
+                },
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "isAdm": {
+                  "type": "boolean"
+                },
+                "createdOn": {
+                  "type": "string",
+                  "readOnly": true
+                },
+                "updatedOn": {
+                  "type": "string",
+                  "readOnly": true
+                }
+              }
+            },
+            "products": {
+              "type": "array",
+              "items": {
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "number"
+                  },
+                  "addedOn": {
+                    "type": "string"
+                  },
+                  "updatedOn": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "UnAuthorized": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "user": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "description": "Hashed with bcryptjs",
+            "type": "string"
+          },
+          "isAdm": {
+            "type": "boolean"
+          }
+        }
+      },
+      "productsList": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Generated with UUID V4",
+              "readOnly": true
+            },
+            "name": {
+              "type": "string"
+            },
+            "cateogry": {
+              "type": "string"
+            },
+            "Price": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Generated with UUID V4",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "cateogry": {
+            "type": "string"
+          },
+          "Price": {
+            "type": "number"
+          }
+        }
+      },
+      "order": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Generated with UUID V4",
+                "readOnly": true
+              },
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "isAdm": {
+                "type": "boolean"
+              },
+              "createdOn": {
+                "type": "string",
+                "readOnly": true
+              },
+              "updatedOn": {
+                "type": "string",
+                "readOnly": true
+              }
+            }
+          },
+          "id": {
+            "type": "string"
+          },
+          "order": {
+            "type": "string"
+          },
+          "cart_id": {
+            "type": "string"
+          },
+          "cart_creation_date": {
+            "type": "string"
+          },
+          "products": {
+            "type": "array",
+            "properties": {
+              "product": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "readOnly": true
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "number"
+                  },
+                  "addedOn": {
+                    "type": "string"
+                  },
+                  "updatedOn": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "JWT": []
+    }
+  ]
+}
